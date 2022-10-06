@@ -44,7 +44,8 @@
 #define MAX_LINE_LEN	80
 #define WHITESPACE		" ,\t\n"
 
-struct command_t {
+struct command_t 
+{
    char *name;
    int argc;
    char *argv[MAX_ARGS];
@@ -55,13 +56,15 @@ int parseCommand(char *, struct command_t *);
 void printPrompt();
 void readCommand(char *);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
    int pid;
    int status;
    char cmdLine[MAX_LINE_LEN];
    struct command_t command;
 
-   while (TRUE) {
+   while (1) 
+   {
       printPrompt();
       /* Read the command line and parse it */
       readCommand(cmdLine);
@@ -69,16 +72,17 @@ int main(int argc, char *argv[]) {
       command.argv[command.argc] = NULL;
 
 	  /*
-	     TODO: if the command is one of the shortcuts you're testing for
+	    TODO: if the command is one of the shortcuts you're testing for
 		 either execute it directly or build a new command structure to
 		 execute next
 	  */
 	  
       /* Create a child process to execute the command */
-      if ((pid = fork()) == 0) {
+      if ((pid = fork()) == 0) 
+      {
          /* Child executing command */
          execvp(command.name, command.argv);
-	 /* TODO: what happens if you enter an incorrect command? */
+	      /* TODO: what happens if you enter an incorrect command? */
       }
       /* Wait for the child to terminate */
       wait(&status); /* EDIT THIS LINE */
@@ -102,7 +106,8 @@ int main(int argc, char *argv[]) {
  * argv[1], and so on. Each time we add a token to argv[],
  * we increment argc.
  */
-int parseCommand(char *cLine, struct command_t *cmd) {
+int parseCommand(char *cLine, struct command_t *cmd) 
+{
    int argc;
    char **clPtr;
    /* Initialization */
@@ -110,7 +115,8 @@ int parseCommand(char *cLine, struct command_t *cmd) {
    argc = 0;
    cmd->argv[argc] = (char *) malloc(MAX_ARG_LEN);
    /* Fill argv[] */
-   while ((cmd->argv[argc] = strsep(clPtr, WHITESPACE)) != NULL) {
+   while ((cmd->argv[argc] = strsep(clPtr, WHITESPACE)) != NULL) 
+   {
       cmd->argv[++argc] = (char *) malloc(MAX_ARG_LEN);
    }
 
@@ -120,20 +126,22 @@ int parseCommand(char *cLine, struct command_t *cmd) {
    strcpy(cmd->name, cmd->argv[0]);
    return 1;
 }
-
 /* End parseCommand function */
 
 /* Print prompt and read command functions - Nutt pp. 79-80 */
-
-void printPrompt() {
+void printPrompt() 
+{
    /* Build the prompt string to have the machine name,
     * current directory, or other desired information
     */
-   promptString = ...; /* EDIT THIS LINE */
+
+   // @TODO do something about this line 
+   char promptString[] = "arl127"; /* EDIT THIS LINE */
    printf("%s ", promptString);
 }
 
-void readCommand(char *buffer) {
+void readCommand(char *buffer) 
+{
    /* This code uses any set of I/O functions, such as those in
     * the stdio library to read the entire command line into
     * the buffer. This implementation is greatly simplified,
@@ -141,5 +149,4 @@ void readCommand(char *buffer) {
     */
    fgets(buffer, 80, stdin);
 }
-
 /* End printPrompt and readCommand */
