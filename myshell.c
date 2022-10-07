@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
    int status;
    char cmdLine[MAX_LINE_LEN];
    struct command_t command;
-
+   
    while (1) 
    {
       printPrompt();
@@ -71,21 +71,105 @@ int main(int argc, char *argv[])
       parseCommand(cmdLine, &command);
       command.argv[command.argc] = NULL;
 
-	  /*
-	    TODO: if the command is one of the shortcuts you're testing for
-		 either execute it directly or build a new command structure to
-		 execute next
-	  */
+      // first test for Quit command
+      if (strcmp(command.name, "Q") == 0)
+      {
+         break;
+      }
+     
+      // Echo command 
+      else if (strcmp(command.name, "E") == 0)
+      {
+         // do directly; test first if an argument was given 
+         if (command.argv[1] != NULL)
+         {
+            printf(command.argv[1]);
+            printf("\n");
+         }
+      }
+
+      // Wipe command 
+      else if (strcmp(command.name, "W") == 0)
+      {
+         strcpy(command.name, "clear");
+      }
+
+      // Make command 
+      else if (strcmp(command.name, "M") == 0)
+      {
+         strcpy(command.name, "nano");
+      }
+
+      // Print command 
+      else if (strcmp(command.name, "P") == 0)
+      {
+         strcpy(command.name, "more");
+      }
+
+      // Help command 
+      else if (strcmp(command.name, "H") == 0)
+      {
+         printf("\nOperating Systems Fall 2022 || Lab 01 - Linux Shell\n\n");
+         printf("Commands:\n\n");
+         
+         printf("C file1 file2           Copy; create file2, copy all bytes of file1 to file2 without deleting file1.\n");
+         printf("D file                  Delete; delete the named file.\n");
+         printf("E comment               Echo; display comment on screen followed by a new line.\n");
+         printf("H                       Help; display the user manual.\n");
+         printf("L                       List; list the contents of the current directory.\n");
+         printf("M file                  Make; create the named text file by launching text editor.\n");
+         printf("P file                  Print; display the contents of the named file on screen.\n");
+         printf("Q                       Quit; end execution of the shell.\n");
+         printf("W                       Wipe; clear the screen.\n");
+         printf("X program               Execute; executes the named program.\n\n");
+      }
+
+      // List command 
+      else if (strcmp(command.name, "L") == 0)
+      {  
+         strcpy(command.name, "ls");
+      }
+
+      // Delete command 
+      else if (strcmp(command.name, "D") == 0)
+      {  
+         strcpy(command.name, "rm");
+      }
+
+      // Copy command 
+      else if (strcmp(command.name, "C") == 0)
+      {  
+         strcpy(command.name, "cp");
+      }
+
+      // Execute command 
+      else if (strcmp(command.name, "X") == 0)
+      {  
+         strcpy(command.name, command.argv[1]);
+      }
+      
+      // Trailing-else for unrecognized commands
+      else 
+      {
+         strcpy(command.name, "Incorrect");
+      }
 	  
       /* Create a child process to execute the command */
       if ((pid = fork()) == 0) 
       {
-         /* Child executing command */
-         execvp(command.name, command.argv);
-	      /* TODO: what happens if you enter an incorrect command? */
-      }
+         if (strcmp(command.name, "Incorrect") != 0)
+         {
+            /* Child executing command */
+            execvp(command.name, command.argv);
+         }
+         else 
+         {
+            // what happens if you enter an incorrect command? 
+            printf("Unrecognized command. Enter 'H' for help manual\n");
+         }
+	   }
       /* Wait for the child to terminate */
-      wait(&status); /* EDIT THIS LINE */
+      wait(&status); 
    }
 
    /* Shell termination */
@@ -135,8 +219,7 @@ void printPrompt()
     * current directory, or other desired information
     */
 
-   // @TODO do something about this line 
-   char promptString[] = "arl127"; /* EDIT THIS LINE */
+   char promptString[] = "linux arl127|>"; 
    printf("%s ", promptString);
 }
 

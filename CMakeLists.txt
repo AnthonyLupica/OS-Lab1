@@ -30,7 +30,6 @@ endif()
 add_custom_target(run
         COMMENT "Run"
         COMMAND $<TARGET_FILE:shell>
-        COMMAND ulimit -u 100
         DEPENDS shell
         USES_TERMINAL
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
