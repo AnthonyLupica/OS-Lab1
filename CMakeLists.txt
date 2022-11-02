@@ -11,7 +11,7 @@ project(shell)
 # C++17 standard
 set(CMAKE_CXX_STANDARD 17)
 
-# Source files for the main program main.cpp (using the CuckooHash class)
+# Source files 
 set(SOURCE myshell.c)
 
 # convert application
